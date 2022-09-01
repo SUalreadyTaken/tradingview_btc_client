@@ -1,0 +1,77 @@
+<body>
+  <div>
+    <div id="main-chart" #mainChart></div>
+    <div id="legend"></div>
+    <br>
+    <div>
+      <div *ngIf="isLoading | async" class="spinner">
+        <img class="spinner" src="assets/loading.gif" />
+      </div>
+      <button (click)="goToEnd(false)">toStart </button>
+      <button (click)="goToEnd(true)">toEnd </button>
+      <div id="interval">
+        version =
+        <select (change)="changeVersion($event)" value="{{tmpV}}">
+          <option value="1">v1</option>
+          <option value="2">v2</option>
+        </select>
+      </div>
+      <div id="interval">
+        start year =
+        <select (change)="changeYear($event)" value="{{year}}">
+          <option value="2017">2017</option>
+          <option value="2018">2018</option>
+          <option value="2019">2019</option>
+          <option value="2020">2020</option>
+        </select>
+      </div>
+      <div id="interval">
+        <select (ngModelChange)="tmpChangeChart($event)" [(ngModel)]="interval" value="{{interval}}">
+          <option value="15min">15M</option>
+          <option value="1h">1H</option>
+          <option value="4h">4H</option>
+          <option value="1d">1D</option>
+        </select>
+      </div>
+    </div>
+    <input (change)="percentageChange($event)" placeholder="0.1" style="width: 20px;">
+    <label> % comission</label>
+    <ul *ngIf="!isMobile">
+      <li *ngFor="let position of positionDataList">
+        <span (click)="goToDate(position.openTime)" style="cursor: pointer;"> {{ position.openDate | date:'dd.MM.YY
+          HH:mm' : 'UTC' }}</span> ->
+        <span (click)="goToDate(position.closeTime)" style="cursor: pointer;"> {{ position.closeDate | date:'dd.MM.YY
+          HH:mm' : 'UTC'}} | </span>
+        <span> {{ position.open.toFixed(3) }} -> </span>
+        <span> {{ position.close.toFixed(3) }} | </span>
+        <span> {{ position.percentage }}% | </span>
+        <span> p: {{ position.profit.toFixed(3) }}x | </span>
+        <span> h: {{ position.toBeat }}x</span>
+        <input type="radio" name="start-point" (click)="changeStart(position.closeTime)">
+      </li>
+    </ul>
+    <ul *ngIf="isMobile">
+      <li class="mobile mobile-li" *ngFor="let position of positionDataList">
+        <span class="mobile" (click)="goToDate(position.openTime)" style="cursor: pointer;"> {{ position.openDate |
+          date:'dd.MM.YY
+          HH:mm' : 'UTC' }}</span> ->
+        <span class="mobile" (click)="goToDate(position.closeTime)" style="cursor: pointer;"> {{ position.closeDate |
+          date:'dd.MM.YY
+          HH:mm' : 'UTC'}} | </span>
+        <span class="mobile"> {{ position.open.toFixed(3) }} -> </span>
+        <span class="mobile"> {{ position.close.toFixed(3) }} | </span>
+        <span class="mobile"> {{ position.percentage }}% | </span>
+        <span class="mobile"> p: {{ position.profit.toFixed(3) }}x | </span>
+        <span class="mobile"> h: {{ position.toBeat }}x</span>
+        <input type="radio" name="start-point" class="mobile-radio" (click)="changeStart(position.closeTime)">
+      </li>
+    </ul>
+    <div id="perfLegend"></div>
+    <div id="perf-chart" #perfChart style="min-width: 600px;"></div>
+    <button (click)="resetPerfChart()">Reset chart</button>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+</body>
